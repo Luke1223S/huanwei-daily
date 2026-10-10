@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>环卫采购信息日报看板 · 2026-10-08</title>
+<title>环卫采购信息日报看板 · 2026-10-09</title>
 <style>
   :root {
     --bg: #0f1115;
@@ -72,7 +72,9 @@
   .chip {
     font-size: 11.5px; color: var(--dim); background: #1d222c;
     border: 1px solid var(--border); border-radius: 20px; padding: 2px 9px;
+    cursor: pointer; transition: color .12s ease, border-color .12s ease;
   }
+  .chip:hover { color: var(--blue); border-color: var(--blue-bd); background: var(--blue-bg); }
   .region-card.key .chip { background: rgba(245,197,66,0.08); border-color: rgba(245,197,66,0.25); color: #d8b85a; }
   .rc-count {
     flex-shrink: 0; text-align: center; background: var(--blue-bg);
@@ -118,6 +120,12 @@
     margin-left: auto; font-size: 11.5px; color: var(--blue); background: var(--blue-bg);
     border: 1px solid var(--blue-bd); border-radius: 8px; padding: 2px 9px; cursor: pointer;
   }
+
+  .cat-head {
+    margin: 14px 0 2px; font-size: 13.5px; font-weight: 700; color: #7dd3fc;
+    border-left: 3px solid var(--blue); padding-left: 8px; line-height: 1.5;
+  }
+  .cat-head .cn { font-weight: 400; color: var(--dim); font-size: 11.5px; margin-left: 6px; }
 
   .item {
     background: var(--card2); border: 1px solid var(--border); border-radius: 12px;
@@ -165,7 +173,7 @@
     <div class="tb"><div class="num" id="sumAll">0</div><div class="lbl">📊 今日总数</div></div>
     <div class="tb"><div class="num" id="sumYx">0</div><div class="lbl">🟢 意向/需求公示</div></div>
   </div>
-  <div class="tip">💡 点击区域查看全省明细；每省右上角 🔗 可复制该省专属链接，直接分享给当地同事</div>
+  <div class="tip">💡 点击区域查看全省明细；直接点击<b>省名标签</b>可跳到该省公告列表；每省右上角 🔗 可复制该省专属链接分享给当地同事</div>
 
   <div id="home"></div>
 
@@ -189,110 +197,596 @@
 
 <script>
 window.DASHBOARD_DATA = {
-  date: "2026-10-08",
-  regions: [
-  { slug:"key", num:"1️⃣", emoji:"⭐", name:"存量重点区域", key:true, provinces:[
-    { name:"广东", items:[
-      { t:"台山市三合镇生活垃圾清扫保洁及清运服务项目（二次）", y:"招标", m:"预算：425.5万元", d:"期限：20个月（2026.11-2028.6）", brief:"台山市三合镇辖区生活垃圾清扫保洁与清运服务采购，本次为二次招标。", url:"http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261008_27442305.htm" },
-      { t:"开平市百合镇城乡生活垃圾收集清运和保洁服务项目（垃圾清运及镇区保洁）", y:"中标", m:"中标金额：188.02万元", d:"期限：12个月", brief:"开平市百合镇城乡生活垃圾收集清运及镇区保洁服务，已公布中标结果。", url:"http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202610/t20261008_27442824.htm" }
-    ]},
-    { name:"重庆", items:[
-      { t:"荣昌区万灵镇及场镇道路环卫清扫保洁服务外包项目（重新招标第三次）", y:"谈判", m:"预算：100万元", d:"期限：未公布", brief:"荣昌区万灵镇及场镇道路环卫清扫保洁服务外包，重新招标第三次。", url:"http://www.ccgp.gov.cn/cggg/dfgg/jzxtpgg/202610/t20261008_27442532.htm" }
-    ]},
-    { name:"山东", items:[
-      { t:"聊城经开区蒋官屯街道2026环卫一体化及垃圾清运项目", y:"磋商", m:"预算：199.88万元", d:"期限：24个月", brief:"聊城经开区蒋官屯街道环卫一体化及垃圾清运服务采购。", url:"http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261008_27447496.htm" },
-      { t:"牡丹区大黄集镇城乡环卫一体化保洁服务项目", y:"中标", m:"中标金额：194万元", d:"期限：1+2年（首签1年）", brief:"牡丹区大黄集镇城乡环卫一体化保洁服务，已公布中标结果。", url:"http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261008_27447560.htm" },
-      { t:"嘉祥化工产业园道路绿化养护及边角地管护服务项目", y:"磋商", m:"预算：124.23万元", d:"期限：1年（最多续签2次）", brief:"嘉祥化工产业园道路绿化养护及边角地管护服务采购。", url:"http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261008_27447619.htm" },
-      { t:"2026年日照马拉松环卫服务项目", y:"中标", m:"中标金额：24.4万元", d:"期限：未公布", brief:"2026年日照马拉松赛事环卫保障服务，已公布中标结果。", url:"http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261008_27447607.htm" }
-    ]},
-    { name:"山西", items:[
-      { t:"忻原大道旅游公路（三家村至天涯山风景区段）日常绿化养护", y:"中标", m:"中标金额：59.85万元", d:"期限：12个月", brief:"忻原大道旅游公路三家村至天涯山风景区段日常绿化养护，已中标。", url:"http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261008_27443243.htm" }
-    ]},
-    { name:"北京", items:[
-      { t:"顺义区南法信镇公厕管理维护服务项目", y:"磋商", m:"预算：320万元", d:"期限：24个月", brief:"顺义区南法信镇公厕管理维护服务采购。", url:"http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261008_27443028.htm" }
-    ]},
-    { name:"江苏", items:[
-      { t:"溧阳经济开发区（上兴镇）2026年度绿化养护服务项目（4个标段）", y:"招标", m:"预算：1054万元", d:"期限：2年（一年一签）", brief:"溧阳经济开发区（上兴镇）年度绿化养护服务，分4个标段。", url:"http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261008_27443481.htm" },
-      { t:"无锡鸿山街道2026-2028年绿化养护项目（2个标段）", y:"招标", m:"预算：792.42万元", d:"期限：2年", brief:"无锡鸿山街道绿化养护项目，分2个标段，服务期2026-2028年。", url:"http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261008_27443183.htm" },
-      { t:"连云港中云街道无物管小区卫生保洁、垃圾清运服务项目", y:"招标", m:"预算：281.96万元", d:"期限：3年（一年一签）", brief:"连云港中云街道无物管小区卫生保洁及垃圾清运服务采购。", url:"http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261008_27445300.htm" },
-      { t:"南京秣陵街道2026-2027年东善桥片区保洁服务", y:"磋商", m:"预算：180万元", d:"期限：1年", brief:"南京秣陵街道东善桥片区保洁服务，服务期2026-2027年。", url:"http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261008_27443854.htm" },
-      { t:"南京秣陵街道2026-2027年上秦淮片区道路保洁服务", y:"磋商", m:"预算：155万元", d:"期限：1年", brief:"南京秣陵街道上秦淮片区道路保洁服务，服务期2026-2027年。", url:"http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261008_27446337.htm" }
-    ]},
-    { name:"浙江", items:[
-      { t:"缙云县新碧街道2026-2028年度市政道路清扫保洁及农村垃圾清运服务项目", y:"招标", m:"预算：1292.89万元", d:"期限：3年", brief:"缙云县新碧街道市政道路清扫保洁及农村垃圾清运服务采购。", url:"http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261008_27444548.htm" },
-      { t:"平阳县萧江镇城区永乐路以北及老街道路清扫保洁项目（2026-2028年）", y:"中标", m:"中标金额：780.6万元", d:"期限：3年", brief:"平阳县萧江镇城区道路清扫保洁项目，已公布中标结果。", url:"http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261008_27440790.htm" },
-      { t:"杭州临平主城区生活垃圾清运项目", y:"中标", m:"中标金额：按综合单价计价", d:"期限：未公布", brief:"杭州临平主城区生活垃圾清运服务，按综合单价计价，总价未公布。", url:"http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261008_27444599.htm" }
-    ]}
-  ]},
-  { slug:"central", num:"2️⃣", emoji:"🏙️", name:"中部区域", key:false, provinces:[
-    { name:"河南", items:[
-      { t:"嵩县道路保洁降尘除霾项目", y:"招标", m:"预算：573.83万元", d:"期限：2年", brief:"嵩县城区道路保洁、降尘除霾服务采购。", url:"http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261008_27445292.htm" }
-    ]},
-    { name:"湖北", items:[
-      { t:"武汉市武昌区社区绿化养护服务（3个采购包）", y:"招标", m:"预算：208.64万元", d:"期限：12个月", brief:"武汉市武昌区社区绿化养护服务，分3个采购包。", url:"http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261008_27445579.htm" },
-      { t:"襄阳内环北线车城广场绿化养护管理服务项目（第二次）", y:"磋商", m:"预算：34.56万元", d:"期限：1年", brief:"襄阳内环北线车城广场绿化养护管理服务，第二次采购。", url:"http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261008_27444946.htm" }
-    ]},
-    { name:"陕西", items:[
-      { t:"咸阳高新区咸兴大道、宝泉路清扫保洁项目", y:"招标", m:"预算：165.29万元", d:"期限：未公布", brief:"咸阳高新区咸兴大道、宝泉路道路清扫保洁服务采购。", url:"http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261008_27446512.htm" },
-      { t:"西咸新区北杜街道2026-2027年农村生活垃圾清运", y:"磋商", m:"预算：117.18万元", d:"期限：1年", brief:"西咸新区北杜街道农村生活垃圾清运服务，服务期2026-2027年。", url:"http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261008_27445995.htm" },
-      { t:"西安阎良区振兴街道农村生活垃圾清运项目", y:"磋商", m:"预算：45万元", d:"期限：1年", brief:"西安阎良区振兴街道农村生活垃圾清运服务采购。", url:"http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261008_27445047.htm" },
-      { t:"铜川市新区正阳路街道辖区行政村垃圾清运项目(二次)采购更正公告（第一次）", y:"更正", m:"预算：未公布", d:"期限：未公布", brief:"铜川新区正阳路街道行政村垃圾清运项目（二次）的更正公告。", url:"http://www.ccgp.gov.cn/cggg/dfgg/gzgg/202610/t20261008_27442502.htm" }
-    ]}
-  ]},
-  { slug:"north", num:"3️⃣", emoji:"🏔️", name:"北部区域", key:false, provinces:[
-    { name:"天津", items:[
-      { t:"津南区环境卫生管理所环卫一体化项目", y:"中标", m:"中标金额：20805.6万元", d:"期限：3年", brief:"天津津南区环卫一体化项目，本期大单，中标金额超2亿元。", url:"http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261008_27446748.htm" },
-      { t:"西青区精武镇滨河公园绿化养护项目", y:"中标", m:"中标金额：71.66万元", d:"期限：1年", brief:"天津西青区精武镇滨河公园绿化养护服务，已中标。", url:"http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202610/t20261008_27446828.htm" }
-    ]},
-    { name:"河北", items:[
-      { t:"唐山市丰南区生活垃圾处理服务项目", y:"中标", m:"中标金额：5054.85万元", d:"期限：3年", brief:"唐山市丰南区生活垃圾处理服务，已公布中标结果。", url:"http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261008_27441369.htm" },
-      { t:"昌黎县2026年城区绿化养护一、二、四标段（二次）", y:"招标", m:"预算：83.65万元", d:"期限：1年", brief:"昌黎县城区绿化养护一、二、四标段，第二次采购。", url:"http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261008_27441343.htm" },
-      { t:"枣强县城餐厨垃圾处理项目", y:"单一来源", m:"预算：47万元", d:"期限：未公布", brief:"枣强县城餐厨垃圾处理服务，单一来源方式采购。", url:"http://www.ccgp.gov.cn/cggg/dfgg/dylygg/202610/t20261008_27441364.htm" }
-    ]},
-    { name:"吉林", items:[
-      { t:"吉林市昌邑区农村环卫服务运营维护项目", y:"招标", m:"预算：1850.22万元", d:"期限：2年", brief:"吉林市昌邑区农村环卫服务运营维护采购。", url:"http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261008_27444506.htm" }
-    ]},
-    { name:"黑龙江", items:[
-      { t:"绥化市2026冬季清雪劳务服务", y:"磋商", m:"预算：120万元", d:"期限：1年", brief:"绥化市2026年冬季清雪劳务服务采购。", url:"http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261008_27447219.htm" }
-    ]},
-    { name:"内蒙古", items:[
-      { t:"伊金霍洛旗札萨克镇环卫劳务服务采购项目", y:"中标", m:"中标金额：439万元", d:"期限：3年（一年一签）", brief:"伊金霍洛旗札萨克镇环卫劳务服务，已公布中标结果。", url:"http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261008_27442984.htm" }
-    ]},
-    { name:"辽宁", items:[
-      { t:"沈阳辽中区城乡环卫作业市场化服务更正公告", y:"更正", m:"预算：未公布", d:"期限：未公布", brief:"沈阳辽中区城乡环卫作业市场化服务的更正公告。", url:"http://www.ccgp.gov.cn/cggg/dfgg/gzgg/202610/t20261008_27443120.htm" }
-    ]}
-  ]},
-  { slug:"northwest", num:"4️⃣", emoji:"🏜️", name:"西北区域", key:false, provinces:[
-    { name:"甘肃", items:[
-      { t:"张掖甘州区2026年北郊湿地绿化养护项目（5个标段）", y:"中标", m:"中标金额：284.02万元（5包合计）", d:"期限：1年", brief:"张掖甘州区北郊湿地绿化养护，分5个标段，已公布中标结果。", url:"http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261008_27442685.htm" }
-    ]}
-  ]},
-  { slug:"south", num:"5️⃣", emoji:"🌴", name:"华南区域", key:false, provinces:[
-    { name:"海南", items:[
-      { t:"海口桂林洋开发区市政设施及园林环卫等一体化管养项目（二次）", y:"招标", m:"预算：26205万元", d:"期限：3年", brief:"海口桂林洋开发区市政设施及园林环卫一体化管养，本期金额最大项目（2.62亿元）。", url:"http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261008_27442988.htm" }
-    ]},
-    { name:"福建", items:[
-      { t:"仙游县盖尾镇全镇一体化卫生保洁服务类采购项目", y:"招标", m:"预算：1953.78万元", d:"期限：3年（一年一签）", brief:"仙游县盖尾镇全镇一体化卫生保洁服务采购。", url:"http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261008_27446011.htm" },
-      { t:"屏南县双溪镇环境卫生清扫和垃圾转运承包项目", y:"招标", m:"预算：297万元", d:"期限：3年", brief:"屏南县双溪镇环境卫生清扫和垃圾转运承包服务采购。", url:"http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261008_27447142.htm" }
-    ]},
-    { name:"广西", items:[
-      { t:"藤县古龙镇2026-2029年镇区清扫保洁及全镇生活垃圾清运项目", y:"中标", m:"中标金额：476.03万元", d:"期限：3年", brief:"藤县古龙镇镇区清扫保洁及全镇生活垃圾清运，已中标。", url:"http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261008_27443721.htm" },
-      { t:"桂平市大洋镇2026-2027年垃圾清运服务", y:"中标", m:"中标金额：123.8万元", d:"期限：2年", brief:"桂平市大洋镇垃圾清运服务，已公布中标结果。", url:"http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202610/t20261008_27445326.htm" }
-    ]}
-  ]},
-  { slug:"east", num:"6️⃣", emoji:"🌊", name:"华东区域", key:false, provinces:[
-    { name:"江西", items:[
-      { t:"余干县城区园林绿化养护市场化外包服务项目", y:"中标", m:"中标金额：157.39万元", d:"期限：未公布", brief:"余干县城区园林绿化养护市场化外包服务，已中标。", url:"http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261008_27444716.htm" }
-    ]}
-  ]},
-  { slug:"southwest", num:"7️⃣", emoji:"⛰️", name:"西南区域", key:false, provinces:[
-    { name:"四川", items:[
-      { t:"自贡市大安区城乡环卫一体化服务（第三轮）", y:"中标", m:"中标金额：10990.38万元", d:"期限：3年", brief:"自贡市大安区城乡环卫一体化服务第三轮，中标金额约1.1亿元。", url:"http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261008_27441039.htm" },
-      { t:"宜宾市翠屏区牟坪镇全域生活垃圾清运（含场镇各村社区）", y:"中标", m:"中标金额：62.8万元", d:"期限：未公布", brief:"宜宾翠屏区牟坪镇全域生活垃圾清运服务（含场镇各村社区）。", url:"http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202610/t20261008_27445465.htm" },
-      { t:"邛崃城区2026年—2029年环卫作业和绿化管护外包服务采购项目更正公告（第二次）", y:"更正", m:"预算：未公布", d:"期限：未公布", brief:"邛崃城区环卫作业和绿化管护外包服务项目的更正公告（第二次）。", url:"http://www.ccgp.gov.cn/cggg/dfgg/gzgg/202610/t20261008_27445417.htm" }
-    ]}
-  ]}
-]
+ "date": "2026-10-09",
+ "regions": [
+  {
+   "slug": "key",
+   "num": "1️⃣",
+   "emoji": "⭐",
+   "name": "存量重点区域",
+   "key": true,
+   "provinces": [
+    {
+     "name": "广东",
+     "items": [
+      {
+       "t": "平湖街道“四园区”周边主干道环卫管养等级提升项目（A）招标公告",
+       "y": "单一来源",
+       "m": "预算：297.30万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：深圳市龙岗区平湖街道办事处",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/dylygg/202610/t20261009_27447801.htm"
+      },
+      {
+       "t": "韶关市浈江区2026年11月-2029年10月公共绿地绿化养护服务项目(二次)结果公告",
+       "y": "中标",
+       "m": "中标金额：320.92万元",
+       "a": "106.97万/年",
+       "d": "期限：3年",
+       "brief": "采购人：韶关市浈江区市政综合管理中心",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27451797.htm"
+      },
+      {
+       "t": "台山市水步镇环卫及绿化养护市场化运营管理项目采购更正公告（第二次）",
+       "y": "更正",
+       "m": "",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：台山市水步镇人民政府",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/gzgg/202610/t20261009_27452744.htm"
+      },
+      {
+       "t": "黄槐镇环卫市场化服务项目中标结果公告",
+       "y": "中标",
+       "m": "中标金额：744.76万元",
+       "a": "248.25万/年",
+       "d": "期限：3年",
+       "brief": "采购人：兴宁市黄槐镇人民政府",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27454882.htm"
+      },
+      {
+       "t": "连州市丰阳镇环卫保洁垃圾清运河道清理（三期）竞争性磋商公告",
+       "y": "磋商",
+       "m": "预算：290.00万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：连州市丰阳镇人民政府",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261009_27455031.htm"
+      }
+     ]
+    },
+    {
+     "name": "山西",
+     "items": [
+      {
+       "t": "晋城市城区市容环卫中心劳务外包服务项目公开招标公告",
+       "y": "招标",
+       "m": "预算：546.21万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：晋城市城区市容环卫中心",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261009_27449117.htm"
+      }
+     ]
+    },
+    {
+     "name": "浙江",
+     "items": [
+      {
+       "t": "2026-2028年度瓯海区娄桥、郭溪、茶山、丽岙街道环卫一体化项目中标结果公告",
+       "y": "中标",
+       "m": "中标金额：6250.07万元",
+       "a": "2083.36万/年",
+       "d": "期限：3年",
+       "brief": "采购人：温州市瓯海区综合行政执法局",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27449559.htm"
+      },
+      {
+       "t": "2026年-2028年瑞安市8个乡镇环卫保洁服务中标(成交)结果公告",
+       "y": "中标",
+       "m": "中标金额：6481.56万元",
+       "a": "2160.52万/年",
+       "d": "期限：3年",
+       "brief": "采购人：瑞安市综合行政执法局",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27452602.htm"
+      },
+      {
+       "t": "余姚市环卫设施环保管家项目中标(成交)结果公告",
+       "y": "中标",
+       "m": "中标金额：56.15万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：余姚市环境卫生管理中心",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27454787.htm"
+      }
+     ]
+    },
+    {
+     "name": "江苏",
+     "items": [
+      {
+       "t": "南京市六合区横梁街道环境卫生及垃圾分类市场化服务中标公告(二)",
+       "y": "中标",
+       "m": "中标金额：879.09万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：南京市六合区人民政府横梁街道办事处",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27450959.htm"
+      },
+      {
+       "t": "徐州市泉山区港务区2026年-2028年绿化养护服务项目中标结果公告",
+       "y": "中标",
+       "m": "中标金额：167.77万元",
+       "a": "55.92万/年",
+       "d": "期限：3年",
+       "brief": "采购人：徐州市泉山区城市管理局",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27452697.htm"
+      },
+      {
+       "t": "滨海港产业片区道路保洁及绿化养护一体化项目中标公告",
+       "y": "中标",
+       "m": "中标金额：830.00万元",
+       "a": "276.67万/年",
+       "d": "期限：3年",
+       "brief": "采购人：盐城滨海港经济区管理委员会",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27456064.htm"
+      }
+     ]
+    },
+    {
+     "name": "山东",
+     "items": [
+      {
+       "t": "嘉祥化工产业园道路绿化养护及边角地管护服务项目采购更正公告（第一次）",
+       "y": "更正",
+       "m": "",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：山东嘉祥经济开发区管理委员会",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/gzgg/202610/t20261009_27456524.htm"
+      },
+      {
+       "t": "嘉祥化工产业园道路绿化养护及边角地管护服务项目采购更正公告（第二次）",
+       "y": "更正",
+       "m": "",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：山东嘉祥经济开发区管理委员会",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/gzgg/202610/t20261009_27456785.htm"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "central",
+   "num": "2️⃣",
+   "emoji": "🏙️",
+   "name": "中部区域",
+   "key": false,
+   "provinces": [
+    {
+     "name": "湖北",
+     "items": [
+      {
+       "t": "荆门市东宝区背街小巷、三无小区清扫保洁服务中标结果公告",
+       "y": "中标",
+       "m": "",
+       "a": "",
+       "d": "期限：3年",
+       "brief": "采购人：荆门市东宝区城市管理执法局本级",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27448365.htm"
+      },
+      {
+       "t": "罗田县匡河镇镇区环境卫生外包服务项目（2026）公告",
+       "y": "磋商",
+       "m": "预算：66.00万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：罗田县匡河镇人民政府本级",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261009_27451022.htm"
+      },
+      {
+       "t": "荆州市荆州区2026-2029年度中心城区环卫清扫保洁作业项目公开招标更正公告",
+       "y": "更正",
+       "m": "",
+       "a": "",
+       "d": "期限：3年",
+       "brief": "采购人：荆州市荆州区城市管理执法局",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/gzgg/202610/t20261009_27454223.htm"
+      }
+     ]
+    },
+    {
+     "name": "陕西",
+     "items": [
+      {
+       "t": "延安市垃圾处理场2026年日常生产运行及设施维护竞争性磋商公告",
+       "y": "磋商",
+       "m": "预算：212.54万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "垃圾处理场运营服务；采购人：延安市垃圾处理场",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261009_27449643.htm"
+      },
+      {
+       "t": "榆林沙地森林公园绿化养护管理竞争性磋商公告",
+       "y": "磋商",
+       "m": "预算：80.00万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：榆林沙地森林公园管理中心",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261009_27453711.htm"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "north",
+   "num": "3️⃣",
+   "emoji": "🏔️",
+   "name": "北部区域",
+   "key": false,
+   "provinces": [
+    {
+     "name": "辽宁",
+     "items": [
+      {
+       "t": "沈阳市铁西区（老城区）环境卫生作业服务项目招标公告",
+       "y": "招标",
+       "m": "预算：23700.00万元",
+       "a": "7900.00万/年",
+       "d": "期限：3年",
+       "brief": "采购人：沈阳市铁西区城市管理局",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261009_27452569.htm"
+      }
+     ]
+    },
+    {
+     "name": "黑龙江",
+     "items": [
+      {
+       "t": "绥化市2026冬季清雪劳务服务采购更正公告（第一次）",
+       "y": "更正",
+       "m": "",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：绥化市城市市容环境卫生服务中心",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/gzgg/202610/t20261009_27453504.htm"
+      }
+     ]
+    },
+    {
+     "name": "吉林",
+     "items": [
+      {
+       "t": "长春市南关区环境卫生管理中心2026-2027年机械租赁服务采购项目招标公告",
+       "y": "招标",
+       "m": "预算：350.00万元",
+       "a": "175.00万/年",
+       "d": "期限：2年",
+       "brief": "环卫作业机械租赁服务；采购人：长春市南关区环境卫生管理中心",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261009_27453719.htm"
+      }
+     ]
+    },
+    {
+     "name": "内蒙古",
+     "items": [
+      {
+       "t": "正蓝旗农村牧区生活垃圾处理项目(二次)中标（成交）结果公告",
+       "y": "中标",
+       "m": "中标金额：237.30万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：正蓝旗城市管理综合行政执法局",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27454676.htm"
+      }
+     ]
+    },
+    {
+     "name": "天津",
+     "items": [
+      {
+       "t": "2026年天津市西青区精武镇绿化养护项目（政府周边道路及民兴路等地块）成交公告",
+       "y": "中标",
+       "m": "中标金额：203.10万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：天津市西青区精武镇农业农村发展服务中心",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202610/t20261009_27455473.htm"
+      },
+      {
+       "t": "2026年天津市西青区精武镇绿化养护项目（安兴路、小镇西西里南侧等地块）成交公告",
+       "y": "中标",
+       "m": "中标金额：82.66万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：天津市西青区精武镇农业农村发展服务中心",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202610/t20261009_27455477.htm"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "northwest",
+   "num": "4️⃣",
+   "emoji": "🏜️",
+   "name": "西北区域",
+   "key": false,
+   "provinces": [
+    {
+     "name": "青海",
+     "items": [
+      {
+       "t": "湟源县环卫作业、市政管养工作市场化服务项目更正公告",
+       "y": "更正",
+       "m": "",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：湟源县城乡管理综合行政执法局",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/gzgg/202610/t20261009_27448347.htm"
+      },
+      {
+       "t": "青藏公路市域重点区段（唐镇段）路域环境卫生综合治理项目公开招标公告",
+       "y": "招标",
+       "m": "预算：246.87万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：格尔木市唐古拉山镇人民政府",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261009_27455677.htm"
+      }
+     ]
+    },
+    {
+     "name": "甘肃",
+     "items": [
+      {
+       "t": "白银市城区道路绿化养护社会化管理项目(第003标段)中标结果公告",
+       "y": "中标",
+       "m": "中标金额：64.59万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：白银市园林管理局",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27451214.htm"
+      },
+      {
+       "t": "2026年抛沙镇区环卫市场化运营和垃圾场焚烧站运行项目招标公告",
+       "y": "招标",
+       "m": "预算：203.63万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：成县城市管理局",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261009_27452800.htm"
+      },
+      {
+       "t": "西峰区新增社会绿化养护管理项目中标（成交）结果公告",
+       "y": "中标",
+       "m": "中标金额：230.04万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：庆阳市西峰区园林管理局",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27452807.htm"
+      }
+     ]
+    },
+    {
+     "name": "宁夏",
+     "items": [
+      {
+       "t": "吴忠市利通区城市生活垃圾处理费征收改革项目（二标段）竞争性磋商公告",
+       "y": "磋商",
+       "m": "预算：70.00万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "垃圾处理费征收服务；采购人：吴忠市利通区住房城乡建设和交通局本级",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261009_27455029.htm"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "south",
+   "num": "5️⃣",
+   "emoji": "🌴",
+   "name": "华南区域",
+   "key": false,
+   "provinces": [
+    {
+     "name": "湖南",
+     "items": [
+      {
+       "t": "岳阳市东风湖公园卫生保洁和水面打捞服务项目中标（成交）公告",
+       "y": "中标",
+       "m": "中标金额：132.45万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：岳阳市沿湖风光带管理中心",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202610/t20261009_27448321.htm"
+      }
+     ]
+    },
+    {
+     "name": "海南",
+     "items": [
+      {
+       "t": "陵水县椰林镇农村道路保洁服务项目结果公告",
+       "y": "中标",
+       "m": "中标金额：355.12万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：陵水黎族自治县椰林镇人民政府",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27448730.htm"
+      }
+     ]
+    },
+    {
+     "name": "福建",
+     "items": [
+      {
+       "t": "福州植物园2026-2029年保洁社会化购买服务项目结果公告",
+       "y": "中标",
+       "m": "中标金额：326.34万元",
+       "a": "108.78万/年",
+       "d": "期限：3年",
+       "brief": "采购人：福州植物园",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27449426.htm"
+      },
+      {
+       "t": "晋江市智慧环卫平台功能优化升级项目竞争性磋商公告",
+       "y": "磋商",
+       "m": "预算：81.40万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "环卫信息化服务；采购人：晋江市青阳环境卫生中心",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261009_27453434.htm"
+      },
+      {
+       "t": "诏安县建筑垃圾处理及资源化利用项目结果公告",
+       "y": "中标",
+       "m": "中标金额：197.21万元",
+       "a": "65.74万/年",
+       "d": "期限：3年",
+       "brief": "采购人：诏安县城市管理和综合执法局",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/cjgg/202610/t20261009_27455056.htm"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "east",
+   "num": "6️⃣",
+   "emoji": "🌊",
+   "name": "华东区域",
+   "key": false,
+   "provinces": [
+    {
+     "name": "上海",
+     "items": [
+      {
+       "t": "新江湾城环卫停车场洗车点污水处理竞争性磋商公告",
+       "y": "磋商",
+       "m": "预算：188.72万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "环卫设施配套服务；采购人：上海市杨浦区绿化和市容管理局",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261009_27447748.htm"
+      },
+      {
+       "t": "杨浦区环发公司第一分公司环卫洗车点污水处理竞争性磋商公告",
+       "y": "磋商",
+       "m": "预算：200.71万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "环卫设施配套服务；采购人：上海市杨浦区绿化和市容管理局",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261009_27447755.htm"
+      }
+     ]
+    },
+    {
+     "name": "安徽",
+     "items": [
+      {
+       "t": "天长市铜城镇绿化养护项目更正公告",
+       "y": "更正",
+       "m": "",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：天长市铜城镇人民政府",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/gzgg/202610/t20261009_27451169.htm"
+      },
+      {
+       "t": "芜湖市鸠江区白茆镇美好乡村市场化环卫清扫清运保洁项目中标结果公告",
+       "y": "中标",
+       "m": "中标金额：558.85万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：芜湖市鸠江区白茆镇人民政府",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27453821.htm"
+      }
+     ]
+    },
+    {
+     "name": "江西",
+     "items": [
+      {
+       "t": "2026年永新县农村环卫一体化项目公开招标结果公示",
+       "y": "中标",
+       "m": "中标金额：1690.03万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：永新县农业农村局",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27451306.htm"
+      },
+      {
+       "t": "2026年永新县农村环卫一体化项目公开招标结果更正公示",
+       "y": "更正",
+       "m": "",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：永新县农业农村局",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/gzgg/202610/t20261009_27453272.htm"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "slug": "southwest",
+   "num": "7️⃣",
+   "emoji": "⛰️",
+   "name": "西南区域",
+   "key": false,
+   "provinces": [
+    {
+     "name": "四川",
+     "items": [
+      {
+       "t": "成都市郫都区友爱镇2026年—2028年环卫作业采购项目中标结果公告",
+       "y": "中标",
+       "m": "中标金额：1365.90万元",
+       "a": "455.30万/年",
+       "d": "期限：3年",
+       "brief": "采购人：成都市郫都区友爱镇人民政府",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27448245.htm"
+      },
+      {
+       "t": "广安市广安区智慧环卫信息化建设服务采购项目(二次)中标结果公告",
+       "y": "中标",
+       "m": "中标金额：598.50万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "环卫信息化服务；采购人：广安市广安区市政环卫所",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/zbgg/202610/t20261009_27448579.htm"
+      },
+      {
+       "t": "成都市温江区柳城街道环境卫生作业服务采购项目招标公告",
+       "y": "招标",
+       "m": "预算：446.10万元",
+       "a": "148.70万/年",
+       "d": "期限：3年",
+       "brief": "采购人：成都市温江区人民政府柳城街道办事处",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/gkzb/202610/t20261009_27453740.htm"
+      },
+      {
+       "t": "马尔康市2026年10-12月市政零星维修及绿化养护购买服务项目(二次)竞争性磋商公告",
+       "y": "磋商",
+       "m": "预算：130.00万元",
+       "a": "",
+       "d": "期限：未公布",
+       "brief": "采购人：马尔康市住房和城乡建设局",
+       "url": "http://www.ccgp.gov.cn/cggg/dfgg/jzxcs/202610/t20261009_27454649.htm"
+      }
+     ]
+    }
+   ]
+  }
+ ]
 };
 </script>
 <script>
@@ -302,19 +796,19 @@ const REGIONS = window.DASHBOARD_DATA.regions;
 const TYPE_BADGE = { "意向":"b-yx", "需求公示":"b-yx", "招标":"b-zb", "磋商":"b-cs", "谈判":"b-cs", "单一来源":"b-cs", "中标":"b-zd", "更正":"b-gz" };
 // 分类排序：0 采购需求(意向/需求公示) → 1 招标公告(招标/磋商/谈判/单一来源) → 2 中标公告 → 3 更正公告
 function cat(y){
-  if (y==="意向" || y==="需求公示") return { k:0, n:"采购需求" };
+  if (y==="意向" || y==="需求公示") return { k:0, n:"采购需求公示" };
   if (y==="中标") return { k:2, n:"中标公告" };
   if (y==="更正") return { k:3, n:"更正公告" };
   return { k:1, n:"招标公告" };
 }
+const CAT_ORDER = ["采购需求公示","招标公告","中标公告","更正公告"];
 function sortedItems(items){
   return items.slice().sort((a,b)=>cat(a.y).k - cat(b.y).k);
 }
 function provCountLine(items){
   const cnt = {};
   items.forEach(i=>{ const c = cat(i.y).n; cnt[c] = (cnt[c]||0)+1; });
-  const order = ["采购需求","招标公告","中标公告","更正公告"];
-  return order.filter(n=>cnt[n]).map(n=>`<b>${n}${cnt[n]}条</b>`).join("丨");
+  return CAT_ORDER.filter(n=>cnt[n]).map(n=>`<b>${n}${cnt[n]}条</b>`).join("丨");
 }
 function countRegion(r){ return r.provinces.reduce((s,p)=>s+p.items.length,0); }
 function countAll(){ return REGIONS.reduce((s,r)=>s+countRegion(r),0); }
@@ -343,7 +837,7 @@ function renderHome(){
   home.innerHTML = "";
   REGIONS.forEach((r)=>{
     const total = countRegion(r);
-    const chips = r.provinces.map(p=>`<span class="chip">${p.name} ${p.items.length}条</span>`).join("");
+    const chips = r.provinces.map(p=>`<span class="chip chip-go" data-r="${r.slug}" data-p="${encodeURIComponent(p.name)}" title="点击查看${p.name}公告明细">${p.name} ${p.items.length}条 ›</span>`).join("");
     const card = document.createElement("div");
     card.className = "region-card" + (r.key?" key":"");
     card.onclick = ()=>{ location.hash = "r=" + r.slug; };
@@ -355,16 +849,26 @@ function renderHome(){
       </div>
       <div class="rc-count"><div class="n">${total}</div><div class="t">条公告</div></div>
       <div class="rc-arrow">›</div>`;
+    card.querySelectorAll(".chip-go").forEach(el=>{
+      el.onclick = (e)=>{ e.stopPropagation(); location.hash = "r=" + el.getAttribute("data-r") + "&p=" + el.getAttribute("data-p"); };
+    });
     home.appendChild(card);
   });
 }
 
 function itemHTML(i){
   const badgeCls = TYPE_BADGE[i.y] || "b-cs";
+  const dur = (i.d || "期限：未公布").replace(/^期限：/, "");
+  let amount;
+  if (i.a) {
+    amount = `<b>年化 ${i.a}</b>` + (i.m && i.m !== i.a ? ` ｜ 总额 ${i.m}` : "");
+  } else {
+    amount = `<b>${i.m || "金额：未公布"}</b>`;
+  }
   return `
     <div class="item">
       <div class="item-title"><span class="badge ${badgeCls}">${i.y}</span>${i.t}</div>
-      <div class="item-meta"><b>${i.m}</b> ｜ ${i.d}</div>
+      <div class="item-meta">${amount} ｜ 服务时长：${dur}</div>
       <div class="item-brief"><span class="bl">简介：</span>${i.brief}</div>
       <a class="item-link" href="${i.url}" target="_blank">查看公告原文 ↗</a>
     </div>`;
@@ -382,10 +886,19 @@ function renderProvBlock(region, prov){
     <span class="prov-link" data-url="${provUrl}">🔗 省专属链接</span>`;
   head.querySelector(".prov-link").onclick = (e)=>copyLink(e.target.getAttribute("data-url"));
   block.appendChild(head);
-  sortedItems(prov.items).forEach(i=>{
-    const div = document.createElement("div");
-    div.innerHTML = itemHTML(i);
-    block.appendChild(div.firstChild);
+  const groups = {};
+  sortedItems(prov.items).forEach(i=>{ const c = cat(i.y).n; (groups[c]=groups[c]||[]).push(i); });
+  CAT_ORDER.forEach(name=>{
+    const arr = groups[name];
+    if (!arr || !arr.length) return;
+    const sec = document.createElement("div");
+    sec.className = "cat-sec";
+    const secHead = document.createElement("div");
+    secHead.className = "cat-head";
+    secHead.innerHTML = `${name}<span class="cn">${arr.length}条</span>`;
+    sec.appendChild(secHead);
+    arr.forEach(i=>{ sec.insertAdjacentHTML("beforeend", itemHTML(i)); });
+    block.appendChild(sec);
   });
   return block;
 }
@@ -402,7 +915,7 @@ function showDetail(region, provName){
     if (!prov) { location.hash = "r=" + region.slug; return; }
     dTitle.textContent = region.num + " " + region.emoji + " " + region.name + " · " + provName;
     dTitle.className = "detail-title" + (region.key?" key":"");
-    document.getElementById("dSub").textContent = "公告发布日期：" + DATA_DATE + " · " + provName + " 共" + prov.items.length + "条 · 采购需求优先展示";
+    document.getElementById("dSub").textContent = "公告发布日期：" + DATA_DATE + " · " + provName + " 共" + prov.items.length + "条 · 按【采购需求公示 → 招标公告 → 中标公告】分组展示";
     dBody.innerHTML = "";
     dBody.appendChild(renderProvBlock(region, prov));
     document.getElementById("backBtn").textContent = "← 返回" + region.name;
@@ -410,7 +923,7 @@ function showDetail(region, provName){
     const total = countRegion(region);
     dTitle.textContent = region.num + " " + region.emoji + " " + region.name + " · 共" + total + "条";
     dTitle.className = "detail-title" + (region.key?" key":"");
-    document.getElementById("dSub").textContent = "公告发布日期：" + DATA_DATE + " · 每省内按【采购需求 → 招标公告 → 中标公告】排序 · 点击 🔗 复制该省专属链接";
+    document.getElementById("dSub").textContent = "公告发布日期：" + DATA_DATE + " · 每省内按【采购需求公示 → 招标公告 → 中标公告】分组 · 点击省名标签可直接跳转该省";
     dBody.innerHTML = "";
     region.provinces.forEach(p=>{ dBody.appendChild(renderProvBlock(region, p)); });
     document.getElementById("backBtn").textContent = "← 返回区域总览";
