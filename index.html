@@ -72,7 +72,9 @@
   .chip {
     font-size: 11.5px; color: var(--dim); background: #1d222c;
     border: 1px solid var(--border); border-radius: 20px; padding: 2px 9px;
+    cursor: pointer; transition: color .12s ease, border-color .12s ease;
   }
+  .chip:hover { color: var(--blue); border-color: var(--blue-bd); background: var(--blue-bg); }
   .region-card.key .chip { background: rgba(245,197,66,0.08); border-color: rgba(245,197,66,0.25); color: #d8b85a; }
   .rc-count {
     flex-shrink: 0; text-align: center; background: var(--blue-bg);
@@ -118,6 +120,12 @@
     margin-left: auto; font-size: 11.5px; color: var(--blue); background: var(--blue-bg);
     border: 1px solid var(--blue-bd); border-radius: 8px; padding: 2px 9px; cursor: pointer;
   }
+
+  .cat-head {
+    margin: 14px 0 2px; font-size: 13.5px; font-weight: 700; color: #7dd3fc;
+    border-left: 3px solid var(--blue); padding-left: 8px; line-height: 1.5;
+  }
+  .cat-head .cn { font-weight: 400; color: var(--dim); font-size: 11.5px; margin-left: 6px; }
 
   .item {
     background: var(--card2); border: 1px solid var(--border); border-radius: 12px;
@@ -165,7 +173,7 @@
     <div class="tb"><div class="num" id="sumAll">0</div><div class="lbl">📊 今日总数</div></div>
     <div class="tb"><div class="num" id="sumYx">0</div><div class="lbl">🟢 意向/需求公示</div></div>
   </div>
-  <div class="tip">💡 点击区域查看全省明细；每省右上角 🔗 可复制该省专属链接，直接分享给当地同事</div>
+  <div class="tip">💡 点击区域查看全省明细；直接点击<b>省名标签</b>可跳到该省公告列表；每省右上角 🔗 可复制该省专属链接分享给当地同事</div>
 
   <div id="home"></div>
 
@@ -195,19 +203,19 @@ const REGIONS = window.DASHBOARD_DATA.regions;
 const TYPE_BADGE = { "意向":"b-yx", "需求公示":"b-yx", "招标":"b-zb", "磋商":"b-cs", "谈判":"b-cs", "单一来源":"b-cs", "中标":"b-zd", "更正":"b-gz" };
 // 分类排序：0 采购需求(意向/需求公示) → 1 招标公告(招标/磋商/谈判/单一来源) → 2 中标公告 → 3 更正公告
 function cat(y){
-  if (y==="意向" || y==="需求公示") return { k:0, n:"采购需求" };
+  if (y==="意向" || y==="需求公示") return { k:0, n:"采购需求公示" };
   if (y==="中标") return { k:2, n:"中标公告" };
   if (y==="更正") return { k:3, n:"更正公告" };
   return { k:1, n:"招标公告" };
 }
+const CAT_ORDER = ["采购需求公示","招标公告","中标公告","更正公告"];
 function sortedItems(items){
   return items.slice().sort((a,b)=>cat(a.y).k - cat(b.y).k);
 }
 function provCountLine(items){
   const cnt = {};
   items.forEach(i=>{ const c = cat(i.y).n; cnt[c] = (cnt[c]||0)+1; });
-  const order = ["采购需求","招标公告","中标公告","更正公告"];
-  return order.filter(n=>cnt[n]).map(n=>`<b>${n}${cnt[n]}条</b>`).join("丨");
+  return CAT_ORDER.filter(n=>cnt[n]).map(n=>`<b>${n}${cnt[n]}条</b>`).join("丨");
 }
 function countRegion(r){ return r.provinces.reduce((s,p)=>s+p.items.length,0); }
 function countAll(){ return REGIONS.reduce((s,r)=>s+countRegion(r),0); }
@@ -236,7 +244,7 @@ function renderHome(){
   home.innerHTML = "";
   REGIONS.forEach((r)=>{
     const total = countRegion(r);
-    const chips = r.provinces.map(p=>`<span class="chip">${p.name} ${p.items.length}条</span>`).join("");
+    const chips = r.provinces.map(p=>`<span class="chip chip-go" data-r="${r.slug}" data-p="${encodeURIComponent(p.name)}" title="点击查看${p.name}公告明细">${p.name} ${p.items.length}条 ›</span>`).join("");
     const card = document.createElement("div");
     card.className = "region-card" + (r.key?" key":"");
     card.onclick = ()=>{ location.hash = "r=" + r.slug; };
@@ -248,16 +256,26 @@ function renderHome(){
       </div>
       <div class="rc-count"><div class="n">${total}</div><div class="t">条公告</div></div>
       <div class="rc-arrow">›</div>`;
+    card.querySelectorAll(".chip-go").forEach(el=>{
+      el.onclick = (e)=>{ e.stopPropagation(); location.hash = "r=" + el.getAttribute("data-r") + "&p=" + el.getAttribute("data-p"); };
+    });
     home.appendChild(card);
   });
 }
 
 function itemHTML(i){
   const badgeCls = TYPE_BADGE[i.y] || "b-cs";
+  const dur = (i.d || "期限：未公布").replace(/^期限：/, "");
+  let amount;
+  if (i.a) {
+    amount = `<b>年化 ${i.a}</b>` + (i.m && i.m !== i.a ? ` ｜ 总额 ${i.m}` : "");
+  } else {
+    amount = `<b>${i.m || "金额：未公布"}</b>`;
+  }
   return `
     <div class="item">
       <div class="item-title"><span class="badge ${badgeCls}">${i.y}</span>${i.t}</div>
-      <div class="item-meta"><b>${i.m}</b> ｜ ${i.d}</div>
+      <div class="item-meta">${amount} ｜ 服务时长：${dur}</div>
       <div class="item-brief"><span class="bl">简介：</span>${i.brief}</div>
       <a class="item-link" href="${i.url}" target="_blank">查看公告原文 ↗</a>
     </div>`;
@@ -275,10 +293,19 @@ function renderProvBlock(region, prov){
     <span class="prov-link" data-url="${provUrl}">🔗 省专属链接</span>`;
   head.querySelector(".prov-link").onclick = (e)=>copyLink(e.target.getAttribute("data-url"));
   block.appendChild(head);
-  sortedItems(prov.items).forEach(i=>{
-    const div = document.createElement("div");
-    div.innerHTML = itemHTML(i);
-    block.appendChild(div.firstChild);
+  const groups = {};
+  sortedItems(prov.items).forEach(i=>{ const c = cat(i.y).n; (groups[c]=groups[c]||[]).push(i); });
+  CAT_ORDER.forEach(name=>{
+    const arr = groups[name];
+    if (!arr || !arr.length) return;
+    const sec = document.createElement("div");
+    sec.className = "cat-sec";
+    const secHead = document.createElement("div");
+    secHead.className = "cat-head";
+    secHead.innerHTML = `${name}<span class="cn">${arr.length}条</span>`;
+    sec.appendChild(secHead);
+    arr.forEach(i=>{ sec.insertAdjacentHTML("beforeend", itemHTML(i)); });
+    block.appendChild(sec);
   });
   return block;
 }
@@ -295,7 +322,7 @@ function showDetail(region, provName){
     if (!prov) { location.hash = "r=" + region.slug; return; }
     dTitle.textContent = region.num + " " + region.emoji + " " + region.name + " · " + provName;
     dTitle.className = "detail-title" + (region.key?" key":"");
-    document.getElementById("dSub").textContent = "公告发布日期：" + DATA_DATE + " · " + provName + " 共" + prov.items.length + "条 · 采购需求优先展示";
+    document.getElementById("dSub").textContent = "公告发布日期：" + DATA_DATE + " · " + provName + " 共" + prov.items.length + "条 · 按【采购需求公示 → 招标公告 → 中标公告】分组展示";
     dBody.innerHTML = "";
     dBody.appendChild(renderProvBlock(region, prov));
     document.getElementById("backBtn").textContent = "← 返回" + region.name;
@@ -303,7 +330,7 @@ function showDetail(region, provName){
     const total = countRegion(region);
     dTitle.textContent = region.num + " " + region.emoji + " " + region.name + " · 共" + total + "条";
     dTitle.className = "detail-title" + (region.key?" key":"");
-    document.getElementById("dSub").textContent = "公告发布日期：" + DATA_DATE + " · 每省内按【采购需求 → 招标公告 → 中标公告】排序 · 点击 🔗 复制该省专属链接";
+    document.getElementById("dSub").textContent = "公告发布日期：" + DATA_DATE + " · 每省内按【采购需求公示 → 招标公告 → 中标公告】分组 · 点击省名标签可直接跳转该省";
     dBody.innerHTML = "";
     region.provinces.forEach(p=>{ dBody.appendChild(renderProvBlock(region, p)); });
     document.getElementById("backBtn").textContent = "← 返回区域总览";
