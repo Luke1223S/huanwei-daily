@@ -39,7 +39,7 @@ if (!html.includes(PLACEHOLDER)) {
 let out = html.replace(PLACEHOLDER, inlineData);
 
 // ---- 5. 同步标题日期（避免标题与数据日期不一致） ----
-const dateMatch = dataJs.match(/date:\s*["'](\d{4}-\d{2}-\d{2})["']/);
+const dateMatch = dataJs.match(/"?\s*date"?\s*:\s*["'](\d{4}-\d{2}-\d{2})["']/);
 if (dateMatch) {
   const d = dateMatch[1];
   out = out.replace(/<title>[^<]*<\/title>/, `<title>环卫采购信息日报看板 · ${d}</title>`);
