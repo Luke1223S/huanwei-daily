@@ -35,7 +35,7 @@ window.DASHBOARD_DATA = {
        "m": "预算：355.62万元",
        "a": null,
        "d": "期限：详见公告",
-       "brief": "社区大件废弃物收集清运处置，11-13开标（东莞市政府网发布）",
+       "brief": "社区大件废弃物收集清运处置，11-13开标（采购人：诸佛岭股份经济联合社）",
        "url": "https://www.dg.gov.cn/tangxia/zwgk/cgzb/content/post_4597008.html"
       },
       {
@@ -179,16 +179,7 @@ window.DASHBOARD_DATA = {
     {
      "name": "浙江",
      "items": [
-      {
-       "t": "宁波奉化滨海新区环境卫生一体化保洁服务采购项目",
-       "y": "招标",
-       "m": "预算：710万元",
-       "a": null,
-       "d": "期限：详见公告",
-       "brief": "红胜开发建设采购，宁波公共资源交易平台发布",
-       "url": "https://zjcs.zwb.ningbo.gov.cn/gDetails?id=fcbf4c65-6bb1-4809-9670-6364cc6b7e5e"
-      },
-      {
+            {
        "t": "玉环市城镇生活垃圾分类运营服务项目（第四次）",
        "y": "中标",
        "m": "中标：283.20万元",
